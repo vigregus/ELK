@@ -16,11 +16,8 @@ config:
   processors:
   - add_cloud_metadata:
 
-  output.file:
-    path: "/usr/share/heartbeat/data"
-    filename: heartbeat
-    rotate_every_kb: 10000
-    number_of_files: 5
+  output.elasticsearch:
+    hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
 
   # output.elasticsearch:
   #   hosts: ["elasticsearch:9200"]
