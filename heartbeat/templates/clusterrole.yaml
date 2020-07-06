@@ -13,5 +13,7 @@ rules:
   resources:
   - namespaces
   - pods
+  - nodes
+  - services
   verbs: ["get", "list", "watch"]
 {{- end -}}
