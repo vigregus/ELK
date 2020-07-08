@@ -21,6 +21,26 @@ daemonset:
   # such as metricbeat.yml for daemonset
   metricbeatConfig:
     metricbeat.yml: |
+      metricbeat.autodiscover:
+        providers:
+        - type: kubernetes
+          host: ${NODE_NAME}
+          templates:
+          - condition:
+              contains:
+                  kubernetes.container.name: "jmx-exporter"
+            config:
+              - module: prometheus
+                period: 10s
+                hosts: "${data.host}:9191"
+                metrics_path: /metrics
+                processors:
+                - copy_fields:
+                   fields:
+                   - from: kubernetes.pod.labels.app
+                     to: service.name
+                   fail_on_error: false
+                   ignore_missing: true
       metricbeat.modules:
       - module: kubernetes
         metricsets:
