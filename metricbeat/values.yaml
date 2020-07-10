@@ -54,6 +54,7 @@ daemonset:
                 period: 10s
                 hosts: ["http://argocd-metrics.argocd.svc.cluster.local:8082"]
                 metrics_path: /metrics
+                add_metadata: true
           - condition:
               contains:
                   kubernetes.namespace: "argocd"
@@ -63,6 +64,7 @@ daemonset:
                 period: 10s
                 hosts: ["http://argocd-server-metrics.argocd.svc.cluster.local:8083"]
                 metrics_path: /metrics
+                add_metadata: true
       metricbeat.modules:
       - module: kubernetes
         metricsets:
