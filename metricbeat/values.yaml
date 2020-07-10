@@ -23,9 +23,9 @@ daemonset:
     metricbeat.yml: |
       metricbeat.autodiscover:
         providers:
-#        - type: kubernetes
-#          host: ${NODE_NAME}
-#          templates:
+        - type: kubernetes
+          host: ${NODE_NAME}
+          templates:
 #          - condition:
 #              contains:
 #                  kubernetes.container.name: "jmx-exporter"
@@ -41,10 +41,6 @@ daemonset:
 #                     to: service.name
 #                   fail_on_error: false
 #                   ignore_missing: true
-        - type: kubernetes
-          host: ${NODE_NAME}
-          resource: service
-          templates:
           - condition:
               contains:
                   kubernetes.namespace: "argocd"
