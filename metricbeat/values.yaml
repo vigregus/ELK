@@ -41,9 +41,14 @@ daemonset:
                      to: service.name
                    fail_on_error: false
                    ignore_missing: true
+        - type: kubernetes
+          host: ${NODE_NAME}
+          resource: service
+          templates:
           - condition:
               contains:
                   kubernetes.namespace: "argocd"
+                  kubernetes.service.name: "argocd-metrics"
             config:
               - module: prometheus
                 period: 10s
@@ -52,6 +57,7 @@ daemonset:
           - condition:
               contains:
                   kubernetes.namespace: "argocd"
+                  kubernetes.service.name: "argocd-server-metrics"
             config:
               - module: prometheus
                 period: 10s
