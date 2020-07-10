@@ -49,6 +49,14 @@ daemonset:
                 period: 10s
                 hosts: ["http://argocd-metrics.argocd.svc.cluster.local:8082"]
                 metrics_path: /metrics
+          - condition:
+              contains:
+                  kubernetes.namespace: "argocd"
+            config:
+              - module: prometheus
+                period: 10s
+                hosts: ["http://argocd-server-metrics.argocd.svc.cluster.local:8083"]
+                metrics_path: /metrics
       metricbeat.modules:
       - module: kubernetes
         metricsets:
