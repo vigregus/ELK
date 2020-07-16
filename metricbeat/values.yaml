@@ -25,7 +25,10 @@ daemonset:
         providers:
         - type: kubernetes
           node: ${NODE_NAME}
-          include_annotations: ["node.maintenance.status"]
+          add_resource_metadata:
+            node:
+              enabled: true
+              include_annotations: ["node.maintenance.status"]
           templates:
           - condition:
               contains:
@@ -44,7 +47,10 @@ daemonset:
                    ignore_missing: true
         - type: kubernetes
           host: ${NODE_NAME}
-          include_annotations: ["node.maintenance.status"]
+          add_resource_metadata:
+            node:
+              enabled: true
+              include_annotations: ["node.maintenance.status"]
           resource: service
           templates:
           - condition:
