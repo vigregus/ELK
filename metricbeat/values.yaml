@@ -25,6 +25,8 @@ daemonset:
         providers:
         - type: kubernetes
           host: ${NODE_NAME}
+          include_annotations: 
+            - node.maintenance.status
           templates:
           - condition:
               contains:
@@ -74,6 +76,8 @@ daemonset:
           - system
           - volume
         period: 10s
+        include_annotations: 
+          - node.maintenance.status
         host: "${NODE_NAME}"
         hosts: ["https://${NODE_NAME}:10250"]
         bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -86,6 +90,8 @@ daemonset:
         - add_kubernetes_metadata: ~
       - module: kubernetes
         enabled: true
+        include_annotations: 
+          - node.maintenance.status
         metricsets:
           - event
       - module: system
@@ -157,6 +163,8 @@ deployment:
       metricbeat.modules:
       - module: kubernetes
         enabled: true
+        include_annotations: 
+          - node.maintenance.status
         metricsets:
           - state_node
           - state_deployment
