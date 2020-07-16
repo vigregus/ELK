@@ -46,7 +46,7 @@ daemonset:
                    fail_on_error: false
                    ignore_missing: true
         - type: kubernetes
-          host: ${NODE_NAME}
+          node: ${NODE_NAME}
           add_resource_metadata:
             node:
               enabled: true
@@ -74,7 +74,7 @@ daemonset:
                 metrics_path: /metrics
                 add_metadata: true
         - type: kubernetes
-          host: ${NODE_NAME}
+          node: ${NODE_NAME}
           add_resource_metadata:
             node:
               enabled: true
