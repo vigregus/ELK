@@ -82,7 +82,7 @@ daemonset:
           templates:
           - condition:
               contains:
-                 kubernetes.node.labels.kubernetes.io/hostname: "phll41000012d"
+                 kubernetes.namespace: "kube-system"
             config:
               - module: etcd
                 metricsets:
