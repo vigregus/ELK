@@ -73,9 +73,6 @@ daemonset:
                 hosts: ["http://argocd-server-metrics.argocd.svc.cluster.local:8083"]
                 metrics_path: /metrics
                 add_metadata: true
-        - type: kubernetes
-          node: ${NODE_NAME}
-          templates:
           - condition:
               contains:
                   kubernetes.namespace: "kube-system"
@@ -88,7 +85,6 @@ daemonset:
                   - metrics
                 period: 10s
                 hosts: ["https://${NODE_NAME}:2379"]
-                bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
                 ssl.certificate_authorities:
                   - /etc/kubernetes/pki/etcd/ca.crt
                 ssl.certificate: /etc/kubernetes/pki/etcd/server.crt
