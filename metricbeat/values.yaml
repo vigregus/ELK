@@ -80,10 +80,7 @@ daemonset:
               enabled: true
               include_labels: ["kubernetes.io/hostname"]
           templates:
-          - condition:
-              contains:
-                 kubernetes.namespace: "kube-system"
-            config:
+            - config:
               - module: etcd
                 metricsets:
                   - leader
