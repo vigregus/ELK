@@ -73,6 +73,31 @@ daemonset:
                 hosts: ["http://argocd-server-metrics.argocd.svc.cluster.local:8083"]
                 metrics_path: /metrics
                 add_metadata: true
+        - type: kubernetes
+          host: ${NODE_NAME}
+          add_resource_metadata:
+            node:
+              enabled: true
+              include_labels: ["kubernetes.io/hostname"]
+          templates:
+          - condition:
+              contains:
+                 kubernetes.node.labels.kubernetes.io/hostname: "phll41000012d"
+            config:
+              - module: etcd
+                metricsets:
+                  - leader
+                  - self
+                  - store
+                  - metrics
+                period: 10s
+                hosts: ["https://${NODE_NAME}:2379"]
+                bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                ssl.certificate_authorities:
+                  - /etc/kubernetes/pki/etcd/ca.crt
+                ssl.certificate: /etc/kubernetes/pki/etcd/server.crt
+                ssl.key: /etc/kubernetes/pki/etcd/server.key
+                add_metadata: true
       metricbeat.modules:
       - module: kubernetes
         metricsets:
@@ -302,8 +327,34 @@ fullnameOverride: ""
 affinity: {}
 envFrom: []
 extraEnvs: []
-extraVolumes: []
-extraVolumeMounts: []
+extraVolumes:
+   - hostPath:
+       path: /var/run/docker.sock
+     name: dockersock
+   - hostPath:
+       path: /etc/kubernetes/pki/etcd/ca.crt
+     name: ca-cert
+   - hostPath:
+       path: /etc/kubernetes/pki/etcd/server.crt
+     name: etcdcert
+   - hostPath:
+       path: /etc/kubernetes/pki/etcd/server.key
+     name: etcdkey
+     #   - name: certs
+     #secret:
+     #secretName: packetbeat-kb-cacert
+extraVolumeMounts:
+   - name: dockersock
+     mountPath: /var/run/docker.sock
+   - name: ca-cert
+     mountPath: /etc/kubernetes/pki/etcd/ca.crt
+     readOnly: true
+   - name: etcdcert
+     mountPath: /etc/kubernetes/pki/etcd/server.crt
+     readOnly: true
+   - name: etcdkey
+     mountPath: /etc/kubernetes/pki/etcd/server.key
+     readOnly: true
 # Allows you to add any config files in /usr/share/metricbeat
 # such as metricbeat.yml for both daemonset and deployment
 metricbeatConfig: {}
