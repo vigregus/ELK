@@ -75,12 +75,11 @@ daemonset:
                 add_metadata: true
         - type: kubernetes
           node: ${NODE_NAME}
-          add_resource_metadata:
-            node:
-              enabled: true
-              include_labels: ["kubernetes.io/hostname"]
           templates:
-            - config:
+          - condition:
+              contains:
+                  kubernetes.namespace: "kube-system"
+            config:
               - module: etcd
                 metricsets:
                   - leader
