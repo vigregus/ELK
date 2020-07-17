@@ -45,9 +45,12 @@ daemonset:
                      to: service.name
                    fail_on_error: false
                    ignore_missing: true
+        - type: kubernetes
+          host: ${NODE_NAME}
+          templates:
           - condition:
               contains:
-                  kubernetes.namespace: "kube-system"
+                 kubernetes.namespace: "kube-system"
             config:
               - module: etcd
                 metricsets:
