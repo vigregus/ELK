@@ -45,6 +45,23 @@ daemonset:
                      to: service.name
                    fail_on_error: false
                    ignore_missing: true
+          - condition:
+              contains:
+                  kubernetes.namespace: "kube-system"
+            config:
+              - module: etcd
+                metricsets:
+                  - leader
+                  - self
+                  - store
+                  - metrics
+                period: 10s
+                hosts: ["https://${NODE_NAME}:2379"]
+                ssl.certificate_authorities:
+                  - /etc/kubernetes/pki/etcd/ca.crt
+                ssl.certificate: /etc/kubernetes/pki/etcd/server.crt
+                ssl.key: /etc/kubernetes/pki/etcd/server.key
+                add_metadata: true
         - type: kubernetes
           node: ${NODE_NAME}
           add_resource_metadata:
@@ -72,23 +89,6 @@ daemonset:
                 period: 10s
                 hosts: ["http://argocd-server-metrics.argocd.svc.cluster.local:8083"]
                 metrics_path: /metrics
-                add_metadata: true
-          - condition:
-              contains:
-                  kubernetes.namespace: "kube-system"
-            config:
-              - module: etcd
-                metricsets:
-                  - leader
-                  - self
-                  - store
-                  - metrics
-                period: 10s
-                hosts: ["https://${NODE_NAME}:2379"]
-                ssl.certificate_authorities:
-                  - /etc/kubernetes/pki/etcd/ca.crt
-                ssl.certificate: /etc/kubernetes/pki/etcd/server.crt
-                ssl.key: /etc/kubernetes/pki/etcd/server.key
                 add_metadata: true
       metricbeat.modules:
       - module: kubernetes
