@@ -321,9 +321,6 @@ envFrom: []
 extraEnvs: []
 extraVolumes:
    - hostPath:
-       path: /var/run/docker.sock
-     name: dockersock
-   - hostPath:
        path: /etc/kubernetes/pki/etcd/ca.crt
      name: ca-cert
    - hostPath:
@@ -336,8 +333,6 @@ extraVolumes:
      #secret:
      #secretName: packetbeat-kb-cacert
 extraVolumeMounts:
-   - name: dockersock
-     mountPath: /var/run/docker.sock
    - name: ca-cert
      mountPath: /etc/kubernetes/pki/etcd/ca.crt
      readOnly: true
