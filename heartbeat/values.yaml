@@ -33,7 +33,7 @@ config:
       templates:
       - condition:
          contains:
-           kubernetes.node.labels.node-role_kubernetes_io/master
+           kubernetes.node.labels.node-role_kubernetes_io/master: ""
         config:
         - type: tcp
           name: Kube-Scheduler-Monitor
