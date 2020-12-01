@@ -37,12 +37,12 @@ config:
         config:
         - type: tcp
           name: Kube-Scheduler-Monitor
-          hosts: ["localhost:10251"]
+          hosts: ["${NODE_NAME}:10259"]
           schedule: "@every 5s"
           timeout: 5s
         - type: tcp
           name: Kube-Controller-Manager-Monitor
-          hosts: ["localhost:10252"]
+          hosts: ["${NODE_NAME}:10257"]
           schedule: "@every 5s"
           timeout: 5s
         - type: tcp
