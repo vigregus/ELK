@@ -5,6 +5,57 @@ image:
 
 config:
   # See https://www.elastic.co/guide/en/beats/heartbeat/current/heartbeat-reference-yml.html for reference
+  heartbeat.autodiscover:
+   providers:
+    - type: kubernetes
+      host: ${NODE_NAME}
+      templates:
+      - condition:
+         contains:
+           kubernetes.namespace: kube-system
+        config:
+          - type: tcp
+            name: Kubelet_Service_Monitor
+            hosts: ["${data.kubernetes.node.name}:10250"]
+            ipv4: true
+            schedule: "@every 5s"
+          - type: tcp
+            name: Kube_Proxy_Monitor
+            hosts: ["${data.kubernetes.node.name}:10256"]
+            ipv4: true
+            schedule: "@every 5s"
+    - type: kubernetes
+      host: ${NODE_NAME}
+      add_resource_metadata:
+        node:
+          enabled: true
+          include_labels: ["node-role.kubernetes.io/master"]
+      templates:
+      - condition:
+         contains:
+           kubernetes.node.labels.node-role_kubernetes_io/master
+        config:
+        - type: tcp
+          name: Kube-Scheduler-Monitor
+          hosts: ["localhost:10251"]
+          schedule: "@every 5s"
+          timeout: 5s
+        - type: tcp
+          name: Kube-Controller-Manager-Monitor
+          hosts: ["localhost:10252"]
+          schedule: "@every 5s"
+          timeout: 5s
+        - type: tcp
+          name: Kube-API-Monitor
+          hosts: ["${NODE_NAME}:6443"]
+          schedule: "@every 5s"
+          timeout: 5s
+        - type: tcp
+          name: ETCD-Service-Monitor
+          hosts: ["${NODE_NAME}:2379"]
+          schedule: "@every 5s"
+          timeout: 5s
+          
   heartbeat.monitors:
   - type: icmp
     schedule: '*/5 * * * * * *'
