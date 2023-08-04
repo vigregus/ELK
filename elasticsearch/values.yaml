@@ -64,11 +64,11 @@ esJavaOpts: "-Xmx1g -Xms1g"
 
 resources:
   requests:
-    cpu: "100m"
-    memory: "64Mi"
+    cpu: 25m"
+    memory: "128Mi"
   limits:
-    cpu: "100m"
-    memory: "64Mi"
+    cpu: "25m"
+    memory: "128Mi"
 
 initResources: {}
   # limits:
